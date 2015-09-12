@@ -33,11 +33,22 @@ def handle_request_for_synonym():
     return raw_send
 
 @bottle.route('/articles', method='POST')
+def handle_request_for_insert():
+    raw_return = bottle.request.body.readline()
+    return_pack = json.loads(raw_return.decode('utf-8'))
+
+    send_pack = dbuser.user_insert(return_pack)
+
+    raw_send = json.dumps(send_pack).encode('utf-8')
+
+    return raw_send
+
+@bottle.route('/articles', method='GET')
 def handle_request_for_articles():
     raw_return = bottle.request.body.readline()
     return_pack = json.loads(raw_return.decode('utf-8'))
 
-    send_pack = dbuser.handle_dict(return_pack)
+    send_pack = dbuser.fetch_articles(return_pack)
 
     raw_send = json.dumps(send_pack).encode('utf-8')
 

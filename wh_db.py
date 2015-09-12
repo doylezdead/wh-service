@@ -17,12 +17,18 @@ class DBUser:
                 'address': '1234 Rain St.',
                 'gender': 'male'}
 
-        db = self.client[data['user']]
+        db = self.client['people']
         infocol = db['info']
 
         infocol.insert_one(data)
         # infocol.find(query) to find objects in the db
         return {'message': 'successfully registered user ' + data['user']}
 
-    def handle_dict(self, obj):
+    def fetch_articles(self, obj):
         return {0: 0}
+
+    def user_insert(self, obj):
+        artcol = self.client['mh']['articles']
+
+        artcol.insertone({})
+        return
