@@ -12,8 +12,10 @@ def signal_handler(signal, frame):
     mongo_proc.send_signal(15)
     print('shutting down cpunch server...')
     sys.exit(0)
-
-os.makedirs(os.path.expanduser('~/.wh/db'), exist_ok=True)
+try:
+    os.makedirs(os.path.expanduser('~/.wh/db'))
+except OSError:
+    pass
 mongo_args = ['mongod', '--logpath', os.path.expanduser('~/.wh/mongolog'), '--bind_ip',
               '127.0.0.1', '--port', '29292', '--dbpath', os.path.expanduser('~/.wh/db')]
 mongo_proc = sp.Popen(mongo_args)
