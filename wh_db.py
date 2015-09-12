@@ -3,6 +3,7 @@ __author__ = 'rcdoyle'
 import pymongo
 import time
 import re
+import newspaper
 
 class DBUser:
 
@@ -32,3 +33,16 @@ class DBUser:
 
         artcol.insertone({})
         return
+
+    def insert_article(self, article):
+        assert type(article) is newspaper.Article
+        blob = {}
+        for attr in ('title', 'text', 'keywords', 'summary', 'url'):
+            blob['title'] = getattr(article, attr)
+            blob['time'] = time.time()
+            blob['rating'] = 0
+
+        artcol = self.client['mh']['articles']
+        artcol.insert_one(blob)
+        return
+
