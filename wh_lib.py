@@ -8,7 +8,7 @@ def find_syns(word):
 
 def import_articles(sitelist):
     imported_sitelist = []
-    dbuser = whdb.DBUser(port=26262)
+    dbuser = whdb.DBUser(port=29292)
     for site in sitelist:
         # populate sitelist
         imported_sitelist.append(newspaper.build(site))
