@@ -9,6 +9,7 @@ def find_syns(word):
 def import_articles(sitelist):
     imported_sitelist = []
     dbuser = whdb.DBUser(port=29292)
+    count = 0
     for site in sitelist:
         # populate sitelist
         imported_sitelist.append(newspaper.build(site))
@@ -18,3 +19,7 @@ def import_articles(sitelist):
             article.download()
             article.parse()
             dbuser.insert_article(article)
+            count += 1
+            print count
+
+    return count

@@ -39,9 +39,9 @@ class DBUser:
         blob = {}
         for attr in ('title', 'text', 'keywords', 'summary', 'url'):
             blob[attr] = getattr(article, attr)
-            blob['time'] = time.time()
-            blob['rating'] = 0
-            print blob['title']
+        blob['time'] = time.time()
+        blob['rating'] = 0
+        print blob['title']
 
         artcol = self.client['mh']['articles']
         artcol.insert_one(blob)
