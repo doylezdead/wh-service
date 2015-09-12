@@ -15,7 +15,7 @@ fi
 
 ln -sf venv/bin/activate .
 source activate
-pip install bottle PyDictionary
+pip install bottle PyDictionary pymongo
 
 
 # python setup.py develop
