@@ -21,5 +21,7 @@ def import_articles(sitelist):
             dbuser.insert_article(article)
             count += 1
             print count
+            if count == 1000:
+                break
 
     return count
