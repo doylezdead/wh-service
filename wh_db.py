@@ -38,7 +38,7 @@ class DBUser:
         assert type(article) is newspaper.Article
         blob = {}
         for attr in ('title', 'text', 'keywords', 'summary', 'url'):
-            blob['title'] = getattr(article, attr)
+            blob[attr] = getattr(article, attr)
             blob['time'] = time.time()
             blob['rating'] = 0
             print blob['title']
