@@ -6,16 +6,11 @@ if [[ $1 == "clean"  ]]; then
     exit 0
 fi
 
-if [[ `which pyvenv-3.4 | wc -l` > 0 ]]; then
-    pyvenv-3.4 venv
-else
-    pvers=`which python3.4`
-    virtualenv -p $pvers venv
-fi
+virtualenv venv
 
 ln -sf venv/bin/activate .
 source activate
-pip install bottle PyDictionary pymongo
+pip install bottle PyDictionary pymongo newspaper
 
 
 # python setup.py develop
