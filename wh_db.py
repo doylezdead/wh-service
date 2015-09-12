@@ -41,6 +41,7 @@ class DBUser:
             blob['title'] = getattr(article, attr)
             blob['time'] = time.time()
             blob['rating'] = 0
+            print blob['title']
 
         artcol = self.client['mh']['articles']
         artcol.insert_one(blob)
