@@ -140,7 +140,7 @@ class DBUser:
         elif inc == -1:
             factor += 1
         else:
-            return 0
+            return {'star': 0}
         new_star = factor/(old_count + 1)
 
         artcol.update({'_id': ObjectId(uid)}, {'$inc': {'rating': 1}, '$set': {'star': new_star}})
