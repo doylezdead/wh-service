@@ -4,6 +4,10 @@ import pymongo
 import time
 import re
 import newspaper
+from wh_lib import top_keywords
+
+
+
 
 class DBUser:
 
@@ -41,9 +45,11 @@ class DBUser:
             blob[attr] = getattr(article, attr)
         blob['time'] = time.time()
         blob['rating'] = 0
+        blob['keywords'] = top_keywords(blob['text'])
         print blob['title']
 
         artcol = self.client['mh']['articles']
         artcol.insert_one(blob)
         return
+
 
