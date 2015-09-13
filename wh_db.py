@@ -55,9 +55,10 @@ def top_keywords(text):
     retlist = []
     count = 0
     for item in sorted(extractor(text)):
-        retlist.append(item[0])
-        count += 1
-        if count == 10:
-            break
+        if item[0].isalpha():
+            retlist.append(item[0])
+            count += 1
+            if count == 10:
+                break
 
     return retlist
