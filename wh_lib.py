@@ -41,3 +41,9 @@ def top_keywords(text):
 
     return retlist
 
+def get_site(url):
+    return re.search(url, '(http://.*/).*').groups(0)[0]
+
+def strip_summary(text):
+    return text[:100] + '...'
+

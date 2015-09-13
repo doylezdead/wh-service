@@ -2,10 +2,9 @@ __author__ = 'rcdoyle'
 
 import pymongo
 import time
-import re
 import random
 import newspaper
-from wh_lib import top_keywords, find_syns
+from wh_lib import top_keywords, find_syns, get_site, strip_summary
 
 class DBUser:
 
@@ -63,14 +62,12 @@ class DBUser:
         # iterate synonyms and match articles.
         # articles that appear the most are chosen as best match
 
-
         w = w.lower()
         splitword = w.split(' ')
         synlist = []
 
         for word in splitword:
             synlist.extend(find_syns(word))
-
 
         relate_dict = {}
 
@@ -101,6 +98,7 @@ class DBUser:
         best_article.pop('text')
         best_article.pop('keywords')
         best_article['_id'] = str(best_article['_id'])
+        best_article['site'] = get_site(best_article['url'])
         return best_article
 
     def get_random_article(self):
@@ -110,6 +108,7 @@ class DBUser:
         randart.pop('text')
         randart.pop('keywords')
         randart['_id'] = str(randart['_id'])
+        randart['site'] = get_site(randart['url'])
         return randart
 
     def get_highest_rated(self):
@@ -118,17 +117,13 @@ class DBUser:
         highest.pop('text')
         highest.pop('keywords')
         highest['_id'] = str(highest['_id'])
+        highest['site'] = get_site(highest['url'])
         return highest
 
     def rate(self, id, inc):
         artcol = self.client['mh']['articles']
         artcol.update({'_id': id}, {'$inc': {'rating': inc}})
         return 'good job!'
-
-
-
-
-
 
 def array_max_index(array):
     max_val = -1
@@ -138,6 +133,3 @@ def array_max_index(array):
             max_val = array[index]
             max_index = index
     return max_index
-
-
-
