@@ -1,6 +1,7 @@
 __author__ = 'rcdoyle'
 
 import pymongo
+from bson.objectid import ObjectId
 import time
 import random
 import newspaper
@@ -76,15 +77,18 @@ class DBUser:
         for word in splitword:
             queryresult = artcol.find({'keywords': {'$in': [word]}})
             for art in queryresult:
-                relate_dict[art['_id']] = 3
+                if str(art['_id']) in relate_dict:
+                    relate_dict[str(art['_id'])] += 3
+                else:
+                    relate_dict[str(art['_id'])] = 3
 
         for syn in synlist:
             synqueryresult = artcol.find({'keywords': {'$in': [syn]}})
             for art in synqueryresult:
-                if art['_id'] in relate_dict:
-                    relate_dict[art['_id']] += 1
+                if str(art['_id']) in relate_dict:
+                    relate_dict[str(art['_id'])] += 1
                 else:
-                    relate_dict[art['_id']] = 1
+                    relate_dict[str(art['_id'])] = 1
 
         keys = relate_dict.keys()
         values = relate_dict.values()
@@ -93,7 +97,7 @@ class DBUser:
             return False
         best_id = keys[max_index]
 
-        best_article = artcol.find({'_id': best_id})[0]
+        best_article = artcol.find({'_id': ObjectId(best_id)})[0]
 
         best_article.pop('text')
         best_article.pop('keywords')
@@ -125,7 +129,7 @@ class DBUser:
 
     def rate(self, id, inc):
         artcol = self.client['mh']['articles']
-        artcol.update({'_id': id}, {'$inc': {'rating': int(inc)}})
+        artcol.update({'_id': ObjectId(id)}, {'$inc': {'rating': int(inc)}})
         return 'good job!'
 
 def array_max_index(array):
