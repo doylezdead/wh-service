@@ -4,10 +4,9 @@ import pymongo
 import time
 import re
 import newspaper
-from wh_lib import top_keywords
+from topia.termextract import extract
 
-
-
+extractor = extract.TermExtractor()
 
 class DBUser:
 
@@ -52,4 +51,11 @@ class DBUser:
         artcol.insert_one(blob)
         return
 
-
+def top_keywords(text):
+    retlist = []
+    count = 0
+    for item in sorted(extractor(text)):
+        retlist.append(item[0])
+        count += 1
+        if count == 10:
+            break

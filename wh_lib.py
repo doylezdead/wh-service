@@ -1,9 +1,7 @@
 import PyDictionary
 import newspaper
 import wh_db as whdb
-from topia.termextract import extract
 
-extractor = extract.TermExtractor()
 
 def find_syns(word):
     dict = PyDictionary.PyDictionary()
@@ -29,11 +27,4 @@ def import_articles(sitelist):
 
     return count
 
-def top_keywords(self, text):
-    retlist = []
-    count = 0
-    for item in sorted(extractor(text)):
-        retlist.append(item[0])
-        count += 1
-        if count == 10:
-            break
+
