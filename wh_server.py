@@ -23,10 +23,10 @@ signal.signal(signal.SIGINT, signal_handler)
 
 dbuser = whdb.DBUser(port=29292)         # create a new dbuser instance to start handling the data package
 
-@bottle.route('/synonym', method='POST')
+@bottle.route('/synonym/', method='GET')
 def handle_request_for_synonym():
     print 'WE GOT TO THE HANDLER'
-    raw_return = bottle.request.query['word']
+    raw_return = bottle.request.GET.get('word')
 
     send_pack = wh_lib.find_syns(raw_return)
 
