@@ -1,13 +1,15 @@
 import PyDictionary
 import newspaper
-import wh_db as whdb
+from topia.termextract import extract
 
+extractor = extract.TermExtractor()
 
 def find_syns(word):
     dict = PyDictionary.PyDictionary()
     return {'syns': dict.synonym(word)}
 
 def import_articles(sitelist):
+    import wh_db as whdb
     imported_sitelist = []
     dbuser = whdb.DBUser(port=29292)
     count = 0
@@ -27,4 +29,15 @@ def import_articles(sitelist):
 
     return count
 
+def top_keywords(text):
+    retlist = []
+    count = 0
+    for item in sorted(extractor(text)):
+        if item[0].isalpha() and (item[0].lower() not in retlist):
+            retlist.append(item[0].lower())
+            count += 1
+            if count == 10:
+                break
+
+    return retlist
 

@@ -4,9 +4,7 @@ import pymongo
 import time
 import re
 import newspaper
-from topia.termextract import extract
-
-extractor = extract.TermExtractor()
+from wh_lib import top_keywords, find_syns
 
 class DBUser:
 
@@ -53,14 +51,50 @@ class DBUser:
         artcol.insert_one(blob)
         return
 
-def top_keywords(text):
-    retlist = []
-    count = 0
-    for item in sorted(extractor(text)):
-        if item[0].isalpha() and (item[0].lower() not in retlist):
-            retlist.append(item[0].lower())
-            count += 1
-            if count == 10:
-                break
+    def get_best_match(self, word):
 
-    return retlist
+        # find synonyms
+        # iterate synonyms and match articles.
+        # articles that appear the most are chosen as best match
+
+        word = word.lower()
+        synlist = find_syns(word)
+        relate_dict = {}
+
+        artcol = self.client['mh']['articles']
+        queryresult = artcol.find({'keywords': {'$in': [word]}})
+        for art in queryresult:
+            relate_dict[art['_id']] = 3
+
+        for syn in synlist:
+            synqueryresult = artcol.find({'keywords': {'$in': [syn]}})
+            for art in synqueryresult:
+                if art['_id'] in relate_dict:
+                    relate_dict[art['_id']] += 1
+                else:
+                    relate_dict[art['_id']] = 1
+
+        keys = relate_dict.keys()
+        values = relate_dict.values()
+        max_index = array_max_index(values)
+        best_id = keys[max_index]
+
+        best_article = artcol.find({'_id':best_id})
+
+        best_article.pop('text')
+        best_article.pop('keywords')
+        return best_article
+
+
+
+def array_max_index(array):
+    max_val = -1
+    max_index = -1
+    for index in range(len(array)):
+        if array[index] > max_val:
+            max_val = array[index]
+            max_index = index
+    return max_index
+
+
+
