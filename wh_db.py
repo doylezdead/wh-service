@@ -3,6 +3,7 @@ __author__ = 'rcdoyle'
 import pymongo
 import time
 import re
+import random
 import newspaper
 from wh_lib import top_keywords, find_syns
 
@@ -56,20 +57,29 @@ class DBUser:
         artcol.insert_one(blob)
         return str(blob['_id'])
 
-    def get_best_match(self, word):
+    def get_best_match(self, w):
 
         # find synonyms
         # iterate synonyms and match articles.
         # articles that appear the most are chosen as best match
 
-        word = word.lower()
-        synlist = find_syns(word)
+
+        w = w.lower()
+        splitword = w.split(' ')
+        synlist = []
+
+        for word in splitword:
+            synlist.extend(find_syns(word))
+
+
         relate_dict = {}
 
         artcol = self.client['mh']['articles']
-        queryresult = artcol.find({'keywords': {'$in': [word]}})
-        for art in queryresult:
-            relate_dict[art['_id']] = 3
+
+        for word in splitword:
+            queryresult = artcol.find({'keywords': {'$in': [word]}})
+            for art in queryresult:
+                relate_dict[art['_id']] = 3
 
         for syn in synlist:
             synqueryresult = artcol.find({'keywords': {'$in': [syn]}})
@@ -92,6 +102,31 @@ class DBUser:
         best_article.pop('keywords')
         best_article['_id'] = str(best_article['_id'])
         return best_article
+
+    def get_random_article(self):
+        artcol = self.client['mh']['articles']
+        colsize = artcol.count()
+        randart = artcol.find()[random.randrange(colsize)]
+        randart.pop('text')
+        randart.pop('keywords')
+        randart['_id'] = str(randart['_id'])
+        return randart
+
+    def get_highest_rated(self):
+        artcol = self.client['mh']['articles']
+        highest = artcol.find({}).sort({'rating': -1}).limit(1)
+        highest.pop('text')
+        highest.pop('keywords')
+        highest['_id'] = str(highest['_id'])
+        return highest
+
+    def rate(self, id, inc):
+        artcol = self.client['mh']['articles']
+        artcol.update({'_id': id}, {'$inc': {'rating': inc}})
+        return 'good job!'
+
+
+
 
 
 

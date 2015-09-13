@@ -45,19 +45,23 @@ def handle_request_for_synonym():
 def handle_request_for_articles():
     raw_return = request.GET.get('word')
 
-    send_pack = dbuser.get_best_match(raw_return)
+    best = dbuser.get_best_match(raw_return)
+    highest = dbuser.get_highest_rated()
+    rand = dbuser.get_random_article()
+
+    send_pack = [best, highest, rand]
 
     raw_send = json.dumps(send_pack)
     return raw_send
 
-@app.route('/articles', method='POST')
+@app.route('/rate/', method='GET')
 def handle_request_for_insert():
-    raw_return = request.body.readline()
-    return_pack = json.loads(raw_return.decode('utf-8'))
+    article_to_rate = request.GET.get('article')
+    rating = request.GET.get('value')
+    if rating != 1 and rating != -1:
+        return 'booooo'
 
-    send_pack = dbuser.user_insert(return_pack)
-
-    raw_send = json.dumps(send_pack).encode('utf-8')
+    raw_send = dbuser.rate(article_to_rate, rating)
 
     return raw_send
 
