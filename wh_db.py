@@ -36,6 +36,12 @@ class DBUser:
         return
 
     def insert_article(self, article):
+        artcol = self.client['mh']['articles']
+        #check and see if its already in
+        query = artcol.find({'title': article['title']})
+        if query.count() > 0:
+            return str(query[0]['_id'])
+
         assert type(article) is newspaper.Article
         blob = {}
         for attr in ('title', 'text', 'keywords', 'summary', 'url'):
@@ -47,9 +53,8 @@ class DBUser:
             return
         print blob['title']
 
-        artcol = self.client['mh']['articles']
         artcol.insert_one(blob)
-        return
+        return str(blob['_id'])
 
     def get_best_match(self, word):
 
