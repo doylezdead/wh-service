@@ -49,7 +49,10 @@ def handle_request_for_articles():
     highest = dbuser.get_highest_rated()
     rand = dbuser.get_random_article()
 
-    send_pack = [best, highest, rand]
+    if best != False:
+        send_pack = [best, highest, rand]
+    else:
+        send_pack = [highest, rand]
 
     raw_send = json.dumps(send_pack)
     return raw_send

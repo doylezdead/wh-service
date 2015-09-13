@@ -90,7 +90,7 @@ class DBUser:
         values = relate_dict.values()
         max_index = array_max_index(values)
         if max_index < 0:
-            return {'msg': 'no best match found'}
+            return False
         best_id = keys[max_index]
 
         best_article = artcol.find({'_id': best_id})[0]
