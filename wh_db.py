@@ -45,6 +45,8 @@ class DBUser:
         blob['time'] = time.time()
         blob['rating'] = 0
         blob['keywords'] = top_keywords(blob['text'])
+        if len(blob['keywords']) == 0:
+            return
         print blob['title']
 
         artcol = self.client['mh']['articles']
@@ -55,8 +57,8 @@ def top_keywords(text):
     retlist = []
     count = 0
     for item in sorted(extractor(text)):
-        if item[0].isalpha():
-            retlist.append(item[0])
+        if item[0].isalpha() and (item[0].lower() not in retlist):
+            retlist.append(item[0].lower())
             count += 1
             if count == 10:
                 break
