@@ -43,7 +43,7 @@ def top_keywords(text):
 
 def get_site(url):
     import re
-    return re.search('(http://.*/).*', url).groups(0)[0]
+    return re.search('(https*://.*/).*', url).groups(0)[0]
 
 def strip_summary(text):
     return text[:100] + '...'
