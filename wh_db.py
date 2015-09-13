@@ -79,7 +79,7 @@ class DBUser:
         max_index = array_max_index(values)
         best_id = keys[max_index]
 
-        best_article = artcol.find({'_id':best_id})
+        best_article = artcol.find({'_id': best_id})[0]
 
         best_article.pop('text')
         best_article.pop('keywords')
