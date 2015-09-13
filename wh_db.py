@@ -129,9 +129,23 @@ class DBUser:
 
     def rate(self, uid, inc):
         artcol = self.client['mh']['articles']
-        artcol.update({'_id': ObjectId(uid)}, {'$inc': {'rating': int(inc)}})
+        article = artcol.find_one({'_id': ObjectId(uid)})
+
+        old_count = article['rating']
+        old_star = article['star']
+
+        factor = old_count * old_star
+        if inc == 1:
+            factor += 5
+        elif inc == -1:
+            factor += 1
+        else:
+            return 0
+        new_star = factor/(old_count + 1)
+
+        artcol.update({'_id': ObjectId(uid)}, {'$inc': {'rating': 1}, '$set': {'star': new_star}})
         newvalue = artcol.find_one({'_id': ObjectId(uid)})
-        return {'rating': newvalue['rating']}
+        return {'star': newvalue['star']}
 
 def array_max_index(array):
     max_val = -1
