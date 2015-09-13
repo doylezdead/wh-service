@@ -38,10 +38,7 @@ class DBUser:
     def insert_article(self, article):
         artcol = self.client['mh']['articles']
         #check and see if its already in
-        try:
-            query = artcol.find({'title': article['title']})
-        except TypeError:
-            print 'lost ' + article['title']
+        query = artcol.find({'title': article.title})
         if query.count() > 0:
             return str(query[0]['_id'])
 
