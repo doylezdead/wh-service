@@ -135,9 +135,9 @@ class DBUser:
         old_star = article['star']
 
         factor = old_count * old_star
-        if inc == 1:
+        if int(inc) == 1:
             factor += 5
-        elif inc == -1:
+        elif int(inc) == -1:
             factor += 1
         else:
             return {'star': 0}
