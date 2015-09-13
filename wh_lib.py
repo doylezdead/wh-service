@@ -12,12 +12,12 @@ def import_articles(sitelist):
     import wh_db as whdb
     imported_sitelist = []
     dbuser = whdb.DBUser(port=29292)
-    count = 0
     for site in sitelist:
         # populate sitelist
         imported_sitelist.append(newspaper.build(site))
 
     for site in imported_sitelist:
+        count = 0
         for article in site.articles:
             article.download()
             article.parse()
