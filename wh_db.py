@@ -130,7 +130,8 @@ class DBUser:
     def rate(self, uid, inc):
         artcol = self.client['mh']['articles']
         artcol.update({'_id': ObjectId(uid)}, {'$inc': {'rating': int(inc)}})
-        return artcol.find({'_id': ObjectId(uid)})[0]['rating']
+        newvalue = artcol.find_one({'_id': ObjectId(uid)})[0]['rating']
+        return newvalue
 
 def array_max_index(array):
     max_val = -1
