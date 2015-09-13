@@ -59,3 +59,5 @@ def top_keywords(text):
         count += 1
         if count == 10:
             break
+
+    return retlist
