@@ -119,7 +119,7 @@ class DBUser:
 
     def get_highest_rated(self):
         artcol = self.client['mh']['articles']
-        highest = artcol.find_one(sort=[("rating", -1)])
+        highest = artcol.find_one(sort=[("star", -1)])
         highest.pop('text')
         highest.pop('keywords')
         highest['_id'] = str(highest['_id'])
