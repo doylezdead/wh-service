@@ -58,13 +58,13 @@ def handle_request_for_articles():
     return raw_send
 
 @app.route('/rate/', method='GET')
-def handle_request_for_insert():
+def handle_request_to_rate():
     article_to_rate = request.GET.get('article')
     rating = request.GET.get('value')
     if -1 > rating > 1:
         return 'booooo'
 
-    raw_send = dbuser.rate(article_to_rate, rating)
+    raw_send = json.dumps(dbuser.rate(article_to_rate, rating))
 
     return raw_send
 
