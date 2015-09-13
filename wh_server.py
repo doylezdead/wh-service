@@ -61,7 +61,7 @@ def handle_request_for_articles():
 def handle_request_for_insert():
     article_to_rate = request.GET.get('article')
     rating = request.GET.get('value')
-    if rating != 1 and rating != -1:
+    if -1 > rating > 1:
         return 'booooo'
 
     raw_send = dbuser.rate(article_to_rate, rating)
