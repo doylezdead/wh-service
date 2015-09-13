@@ -25,6 +25,13 @@ signal.signal(signal.SIGINT, signal_handler)
 
 dbuser = whdb.DBUser(port=29292)         # create a new dbuser instance to start handling the data package
 
+@app.hook('after_request')
+def enable_cors():
+
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
+
+
 @app.route('/synonym/', method='GET')
 def handle_request_for_synonym():
     raw_return = request.GET.get('word')
@@ -32,9 +39,6 @@ def handle_request_for_synonym():
     send_pack = wh_lib.find_syns(raw_return)
 
     raw_send = json.dumps(send_pack)
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
     return raw_send
 
 @app.route('/articles/', method='GET')
@@ -44,9 +48,6 @@ def handle_request_for_articles():
     send_pack = dbuser.get_best_match(raw_return)
 
     raw_send = json.dumps(send_pack)
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
     return raw_send
 
 @app.route('/articles', method='POST')
