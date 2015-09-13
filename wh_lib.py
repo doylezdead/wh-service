@@ -50,5 +50,8 @@ def get_site(url):
                 return url[:index]
 
 def strip_title(text):
-    return text[:60] + '...'
+    if len(text) > 60:
+        return text[:60] + '...'
+    else:
+        return text
 
