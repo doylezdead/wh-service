@@ -23,6 +23,13 @@ signal.signal(signal.SIGINT, signal_handler)
 
 dbuser = whdb.DBUser(port=29292)         # create a new dbuser instance to start handling the data package
 
+@bottle.hook('after_request')
+def enable_cors():
+
+    bottle.response.headers['Access-Control-Allow-Origin'] = '*'
+    bottle.response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
+    bottle.response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+
 @bottle.route('/synonym/', method='GET')
 def handle_request_for_synonym():
     print 'WE GOT TO THE HANDLER'
@@ -31,7 +38,9 @@ def handle_request_for_synonym():
     send_pack = wh_lib.find_syns(raw_return)
 
     raw_send = json.dumps(send_pack)
-
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
     return raw_send
 
 @bottle.route('/articles', method='POST')
