@@ -4,7 +4,7 @@ import pymongo
 import time
 import random
 import newspaper
-from wh_lib import top_keywords, find_syns, get_site, strip_summary
+from wh_lib import top_keywords, find_syns, get_site, strip_title
 
 class DBUser:
 
@@ -99,6 +99,7 @@ class DBUser:
         best_article.pop('keywords')
         best_article['_id'] = str(best_article['_id'])
         best_article['site'] = get_site(best_article['url'])
+        best_article['title'] = strip_title(best_article['title'])
         return best_article
 
     def get_random_article(self):
@@ -109,6 +110,7 @@ class DBUser:
         randart.pop('keywords')
         randart['_id'] = str(randart['_id'])
         randart['site'] = get_site(randart['url'])
+        randart['title'] = strip_title(randart['title'])
         return randart
 
     def get_highest_rated(self):
@@ -118,6 +120,7 @@ class DBUser:
         highest.pop('keywords')
         highest['_id'] = str(highest['_id'])
         highest['site'] = get_site(highest['url'])
+        highest['title'] = strip_title(highest['title'])
         return highest
 
     def rate(self, id, inc):

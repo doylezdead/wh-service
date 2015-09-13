@@ -49,6 +49,6 @@ def get_site(url):
             if slashcount == 3:
                 return url[:index]
 
-def strip_summary(text):
-    return text[:100] + '...'
+def strip_title(text):
+    return text[:60] + '...'
 
