@@ -25,6 +25,7 @@ dbuser = whdb.DBUser(port=29292)         # create a new dbuser instance to start
 
 @bottle.route('/synonym', method='POST')
 def handle_request_for_synonym():
+    print 'WE GOT TO THE HANDLER'
     raw_return = bottle.request.query['word']
 
     send_pack = wh_lib.find_syns(raw_return)
