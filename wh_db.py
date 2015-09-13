@@ -83,6 +83,7 @@ class DBUser:
 
         best_article.pop('text')
         best_article.pop('keywords')
+        best_article['_id'] = str(best_article['_id'])
         return best_article
 
 
